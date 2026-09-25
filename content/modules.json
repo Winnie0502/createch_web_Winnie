@@ -1,0 +1,19 @@
+{
+  "modules": [
+    {
+      "id": "creative-tech-1",
+      "title": "Creative Tech 1",
+      "hasProjects": true
+    },
+    {
+      "id": "ideas-in-art-tech",
+      "title": "Ideas in Art & Tech",
+      "hasProjects": false
+    },
+    {
+      "id": "creative-industry-research",
+      "title": "Creative Industry Research",
+      "hasProjects": false
+    }
+  ]
+}

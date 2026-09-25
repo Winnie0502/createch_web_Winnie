@@ -1,0 +1,114 @@
+# The editor only runs locally (npm run cms + local_backend), so this backend is
+# never contacted; Decap just requires one to be declared.
+backend:
+  name: github
+  repo: your-username/creattech_websites
+  branch: main
+
+local_backend: true
+
+media_folder: "assets/images"
+# Relative, not "/assets/images": on GitHub Pages the site is served from a
+# /<repo-name>/ subpath, so a root-absolute path would 404.
+public_folder: "assets/images"
+
+collections:
+  - name: "site_settings"
+    label: "Site Settings"
+    files:
+      - name: "settings"
+        label: "Your Details"
+        file: "content/site.json"
+        fields:
+          - label: "Your Name"
+            name: "studentName"
+            widget: "string"
+            required: false
+            hint: "Shown in the site title: \"Creative Technologies MSc — The Work of ...\""
+
+  - name: "weeks_creative_tech_1"
+    label: "Creative Tech 1 — Weekly Blog"
+    folder: "content/modules/creative-tech-1/weeks"
+    create: false
+    extension: "json"
+    format: "json"
+    identifier_field: "title"
+    fields: &acm_week_fields
+      - { label: "Week Number", name: "week", widget: "number", value_type: "int" }
+      - { label: "Title", name: "title", widget: "string", required: false }
+      - { label: "Date", name: "date", widget: "datetime", required: false }
+      - label: "1. Introduction"
+        name: "introduction"
+        widget: "text"
+        required: false
+        hint: "About 50 words. Frame the week's question from where you stand, and say how you'll answer it — by writing or by making."
+      - label: "2. Related Work"
+        name: "related_work"
+        widget: "text"
+        required: false
+        hint: "About 60 words, 3-4 sources. What you drew on: this week's readings/videos/artworks, plus up to two sources you found yourself."
+      - label: "3. Method"
+        name: "method"
+        widget: "text"
+        required: false
+        hint: "About 40 words. Making: what you made, with what, and the choices you took. Writing: how you built the argument."
+      - label: "4. Results and Discussion"
+        name: "results_discussion"
+        widget: "text"
+        required: false
+        hint: "Making: about 120 words. Writing: about 240 words. Show the artefact (image/link + caption) or your argument around a case study. What surprised you, what's unresolved."
+      - label: "5. Conclusion and Future Work"
+        name: "conclusion_future_work"
+        widget: "text"
+        required: false
+        hint: "About 50 words. Your working answer to the question, and how you'll use it in your own practice."
+      - label: "Images"
+        name: "images"
+        widget: "list"
+        required: false
+        field: { label: "Image", name: "image", widget: "image" }
+      - { label: "Video URL (YouTube or Vimeo link)", name: "video", widget: "string", required: false }
+      - label: "References"
+        name: "references"
+        widget: "text"
+        required: false
+        hint: "Every source cited in the text, numbered, in ACM reference style, e.g. [1] Aaron Koblin and Daniel Massey. 2009. A Bicycle Built for Two Thousand. https://www.bicyclebuiltfortwothousand.com/"
+
+  - name: "weeks_ideas_in_art_tech"
+    label: "Ideas in Art & Tech — Weekly Blog"
+    folder: "content/modules/ideas-in-art-tech/weeks"
+    create: false
+    extension: "json"
+    format: "json"
+    identifier_field: "title"
+    fields: *acm_week_fields
+
+  - name: "weeks_creative_industry_research"
+    label: "Creative Industry Research — Weekly Blog"
+    folder: "content/modules/creative-industry-research/weeks"
+    create: false
+    extension: "json"
+    format: "json"
+    identifier_field: "title"
+    fields: *acm_week_fields
+
+  - name: "projects_creative_tech_1"
+    label: "Creative Tech 1 — Projects"
+    files:
+      - name: "projects"
+        label: "Projects"
+        file: "content/modules/creative-tech-1/projects.json"
+        fields:
+          - label: "Projects"
+            name: "projects"
+            widget: "list"
+            fields:
+              - { label: "Title", name: "title", widget: "string" }
+              - { label: "Description", name: "description", widget: "text" }
+              - label: "Images"
+                name: "images"
+                widget: "list"
+                required: false
+                field: { label: "Image", name: "image", widget: "image" }
+              - { label: "Video URL (YouTube or Vimeo link)", name: "video", widget: "string", required: false }
+              - { label: "Project Link (optional)", name: "link", widget: "string", required: false }
