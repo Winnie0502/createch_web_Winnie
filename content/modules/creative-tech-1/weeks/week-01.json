@@ -1,13 +1,15 @@
 {
-  "week": 1,
-  "title": "",
-  "date": "",
-  "introduction": "",
+  "method": "This week, I watched some works about Second World War, and I listened to an audio made from 2,088 human voices. It was really interesting, and it made me think about the relationship between humans and machines through sound.\n\nWe also played some fun games and got to know each other better. On Thursday, we listened to an interesting lecture and took some fun photos of things in this building that I feel connected to. We even had delicious pizza! Finally, we learned how to open and set up a blog.",
   "related_work": "",
-  "method": "",
-  "results_discussion": "",
+  "references": "",
   "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "date": "2026-09-27T19:46:00.000+01:00",
+  "results_discussion": "This photo shows what I might do in the future. I might record my voice in a recording studio, write or draw my ideas on a whiteboard, or use a 3D printer to print something",
+  "week": 1,
+  "title": " week 1",
+  "images": [
+    "assets/images/3f92e3543849f2778b4f1946ed37dd1c.jpeg"
+  ],
+  "introduction": "",
+  "video": ""
 }
