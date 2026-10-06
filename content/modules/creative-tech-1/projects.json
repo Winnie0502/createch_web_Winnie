@@ -1,3 +1,11 @@
 {
-  "projects": []
+  "projects": [
+    {
+      "title": "Projects0 - mood board and reference",
+      "description": "Reference\nPeer reviewed journal:\n1.Blomberg, J. (2018). The Semiotics of the Game Controller. Game Studies, 18(2).\nsouse：Game Studies\nhttps://gamestudies.org/1802/articles/blomberg\n\n2.Wang, F. (2023). Estimation of global waste smartphones and embedded critical raw materials: An industry life cycle perspective. Resources, Conservation and Recycling. DOI: 10.1016/j.resconrec.2023.107063\nsouse：Resources, Conservation and Recycling\nhttps://www.sciencedirect.com/science/article/pii/S0921344923001994#article\n\n3.Mayers, K., Koomey, J., Hall, R., Bauer, M., France, C., & Webb, A. (2015). The Carbon Footprint of Games Distribution. Journal of Industrial Ecology, 19(3), 402–415.\nsouse：Journal of Industrial Ecology\nhttps://onlinelibrary.wiley.com/doi/abs/10.1111/jiec.12181\n\nNew:\n4.TIME, \"Amnesty: Children Mine Cobalt Used in Smartphone Batteries\"(2016)\nhttps://time.com/4184726/cobalt-child-labor-smartphone-amnesty-international/\n\n5.Mongabay (2022). Playing dangerously: The environmental impact of video gaming consoles. \nhttps://news.mongabay.com/2022/10/playing-dangerously-the-environmental-impact-of-video-gaming-consoles/\n\n6.TechRadar, \"UK Nintendo Switch owners can now get their Joy-Con controllers repaired for free\"\nhttps://www.techradar.com/news/uk-nintendo-switch-owners-can-now-get-their-joy-con-controllers-repaired-for-free\n\nGovernnment publication:\n7.House of Commons Environmental Audit Committee (2020). Electronic Waste and the Circular Economy. \nsouse：Select committee reports\nhttps://publications.parliament.uk/pa/cm5801/cmselect/cmenvaud/220/22005.htm\n\nCommercial:\n8.iFixit, DualSense Controller repair and teardown guides.\nhttps://www.ifixit.com/Device/DualSense_Controller_V3\n\nMintel：\n9.Mintel (2021) Video Games and Consoles – UK – 2021. London: Mintel Group Ltd. 31 August 2021. \nhttps://clients.mintel.com/content/report/video-games-and-consoles-uk-2021\n",
+      "images": [
+        "assets/images/mood-board.png"
+      ]
+    }
+  ]
 }
