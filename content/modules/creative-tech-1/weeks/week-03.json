@@ -1,13 +1,15 @@
 {
-  "week": 3,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
+  "related_work": "I used my sprite art. At first, I just created sprites showing the controller parts popping off one by one, but I felt that was too simple and didn’t convey what I wanted to express. So I drew a character holding the controller—with each click, a part of the controller breaks off until it eventually breaks completely, and no one repairs or recycles it. This corresponds to the reference material’s description of how controllers are prone to breaking and aren’t recycled after use. After I finished drawing it, Alice taught me how to embed it into a webpage to create an animation. Alice was very patient and encouraging, and in the end, I completed the project.",
+  "references": "",
   "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "date": "2026-10-11T22:44:00.000+01:00",
+  "results_discussion": "",
+  "week": 3,
+  "title": "week3",
+  "images": [
+    "assets/images/手部精灵图.png"
+  ],
+  "introduction": "This week we went to London to attend the BFI Film Festival. Unfortunately, I only got to try one activity—the water installation. Some of the other activities were VR experiences. I also went to the game room to play some games, which was a lot of fun, and at the end, I even saw celebrities on the red carpet. We also created spirit boards, and the teacher gave each of us specific feedback on our spirit boards and showed us some example websites.",
+  "video": ""
 }

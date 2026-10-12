@@ -1,13 +1,15 @@
 {
-  "week": 2,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
+  "related_work": "I learned HTML and CSS from Alice, which was very helpful for building my website. My project was to create a game controller, so I researched relevant references on game controllers from peer-reviewed sources, news articles, government agencies, Mintel, and business publications. After reviewing this material, I discovered that a particularly high percentage of people simply throw away electronic devices after use rather than repairing or recycling them, which causes significant environmental pollution. Furthermore, the joysticks on game controllers are very prone to breaking. What shocked me even more was that child labor is used in the Democratic Republic of the Congo to produce electronic components, resulting in serious injuries to children. In addition, I created mood boards to define my design style.",
+  "references": "",
   "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "date": "2026-10-03T22:29:00.000+01:00",
+  "results_discussion": "",
+  "week": 2,
+  "title": "week2",
+  "images": [
+    "assets/images/1628787786b5ac021cc16a9eb44ed059.png"
+  ],
+  "introduction": "This week we learned about HTML, CSS, and JavaScript. I learned that HTML provides the framework for a web page, CSS changes its appearance, and JavaScript enables interactivity. Writing this code can result in a website, which really excites me. Boyd had us draw cards at random to get inspiration and think about the projects we wanted to work on. That was a lot of fun. My Project 0 is to build a game controller, and I’ve done some literature review and created a mood board for it.",
+  "video": "1.Blomberg, J. (2018). The Semiotics of the Game Controller. Game Studies, 18(2). souse：Game Studies https://gamestudies.org/1802/articles/blomberg2.Wang, F. (2023). Estimation of global waste smartphones and embedded critical raw materials: An industry life cycle perspective. Resources, Conservation and Recycling. DOI: 10.1016/j.resconrec.2023.107063 souse：Resources, Conservation and Recycling https://www.sciencedirect.com/science/article/pii/S0921344923001994#article3.Mayers, K., Koomey, J., Hall, R., Bauer, M., France, C., & Webb, A. (2015). The Carbon Footprint of Games Distribution. Journal of Industrial Ecology, 19(3), 402–415. souse：Journal of Industrial Ecology https://onlinelibrary.wiley.com/doi/abs/10.1111/jiec.121814.TIME, \"Amnesty: Children Mine Cobalt Used in Smartphone Batteries\"(2016) https://time.com/4184726/cobalt-child-labor-smartphone-amnesty-international/5.Mongabay (2022). Playing dangerously: The environmental impact of video gaming consoles.  https://news.mongabay.com/2022/10/playing-dangerously-the-environmental-impact-of-video-gaming-consoles/6.TechRadar, \"UK Nintendo Switch owners can now get their Joy-Con controllers repaired for free\" https://www.techradar.com/news/uk-nintendo-switch-owners-can-now-get-their-joy-con-controllers-repaired-for-free7.House of Commons Environmental Audit Committee (2020). Electronic Waste and the Circular Economy.  souse：Select committee reports https://publications.parliament.uk/pa/cm5801/cmselect/cmenvaud/220/22005.htm8.iFixit, DualSense Controller repair and teardown guides. https://www.ifixit.com/Device/DualSense_Controller_V39.Mintel (2021) Video Games and Consoles – UK – 2021. London: Mintel Group Ltd. 31 August 2021.  https://clients.mintel.com/content/report/video-games-and-consoles-uk-2021"
 }
