@@ -1,13 +1,20 @@
 {
-  "week": 3,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
+  "related_work": "I plan to create a website featuring a giant bird in flight made up of many small birds, to help people understand flocks of birds of prey. This website consists of many small birds that form a large bird in flight; when you move your mouse over the flock, the small birds will scatter and fly elsewhere, and once you move the mouse away, they will regroup. This mimics the behavior of a flock of birds of prey: there is no lead bird; the flock forms spontaneously, and each bird adjusts its direction based on the movements of the birds around it. To make it even more interesting, I’ve also added features where the birds scatter completely and then regroup, as well as a night mode.",
+  "references": "",
   "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "date": "2026-10-11T23:46:00.000+01:00",
+  "results_discussion": "",
+  "week": 3,
+  "title": "week3",
+  "images": [
+    "assets/images/图像2026-10-14-00.03.png",
+    "assets/images/截屏2026-10-14-00.03.38.png",
+    "assets/images/截屏2026-10-14-00.04.04.png",
+    "assets/images/截屏2026-10-14-00.04.32.png",
+    "assets/images/截屏2026-10-14-00.04.57.png",
+    "assets/images/截屏2026-10-14-00.05.35.png"
+  ],
+  "introduction": "This week in class, we discussed birds and flocks of birds. I learned why humans have been so fascinated by birds since ancient times. The teacher showed us a performance by a singer with silhouettes of birds projected behind him. It was all very interesting, so I decided to create a website about birds I think it will be a lot of fun.",
+  "video": ""
 }

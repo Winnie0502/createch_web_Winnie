@@ -1,13 +1,13 @@
 {
-  "week": 3,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
-  "method": "",
-  "results_discussion": "",
+  "method": "1.Feminist hacking\n:Meaning: Taking technology apart and building it again in a fair and open way.\nWhy it matters: It helps me think about who can use technology and who cannot.2.Diffraction:Meaning: Reading different ideas together to see how differences are made.\nWhy it matters: It helps me look at my own work from different sides.3.Ethical hardware:Meaning: Electronics made without harmful mining or unfair work, using recycled or local materials.\nWhy it matters: It gives me a way to check the materials in my project and think about the environment.",
+  "related_work": "Q1. What are the main goals of the book?\n\nThe book has three main goals. First, it wants artists to use technology in a fairer and safer way. Second, it shows how electronics are made, for example from mining and e-waste, and it says this is a problem. Third, it wants to make the tech community more open to women and other groups who are often left out.Q2. How are these presented/achieved?\n\nThe book has three parts. Part one explains the ideas and the method. Part two shows the art projects, like the clay circuit board and the ethical hardware kit. Part three talks about workshops, a game and a festival. The authors also made five simple rules for their hardware, for example “no harmful mining” and “no e-waste”.Q3. How do they centre excluded genders in hardware art?\n\nThey work with women, trans people and non-binary people, who are often not welcome in tech. They use a feminist hackerspace in Vienna as a safe place. They also invite these artists to talk about their work and their problems in interviews. In this way, their voices are heard.Q4. What is this method? How does it work?\n\nThe method is called feminist hacking. It means we take technology apart and try to understand it. Then we build something new with recycled or local materials. People learn from each other, not only from experts. The authors also use ideas from Karen Barad, like diffraction, to think about differences in a new way.Q5. What does it contain? What do they use for this method?\n\nThe method uses rules, workshops, interviews and handmade objects. For example, they make circuit boards from clay and batteries from mud. They also made a backpack kit with three parts: electronics, a wet lab and textiles. In addition, they made an online game for school students and held a festival with many artists.",
+  "references": "",
   "conclusion_future_work": "",
+  "date": "2026-10-11T23:42:00.000+01:00",
+  "results_discussion": "",
+  "week": 3,
+  "title": "week3",
   "images": [],
-  "video": "",
-  "references": ""
+  "introduction": "",
+  "video": ""
 }
