@@ -1,0 +1,29 @@
+{
+  "captions": [
+    ["Like new.", "Press the button to play."],
+    ["The sticks was moved.", ""],
+    ["Small cracks appear.", ""],
+    ["The cracks spread.", ""],
+    ["The D-pad stops responding.", ""],
+    ["More cracks.", ""],
+    ["The shell starts to split.", ""],
+    ["The face buttons stop responding.", ""],
+    ["It is barely holding together.", ""],
+    ["A crack runs through the body.", ""],
+    ["It breaks in two.", ""],
+    ["Pulled apart. End of life.", "Nobody is going to fix it."]
+  ],
+  "tossing": "Into the general waste it goes.",
+  "binned": "Not repaired. Not reused. Not recycled.",
+  "title": "Nobody repaired it. Nobody recycled it.",
+  "intro": "This controller went into the general waste. The UK Parliament's Environmental Audit Committee describes the same pattern for electronics in general. Each person in the UK buys just under three new electrical items every year.",
+  "stats": [
+    { "n": "3 → 4", "text": "For every three items we throw away, we buy four new ones." },
+    { "n": "12%", "text": "Only a maximum of 12% of electronics is estimated to be re-used." },
+    { "n": "55%", "text": "The UK is not collecting, let alone recycling, more than 55% of electronics put on the market." },
+    { "n": "23.9 kg", "text": "E-waste per person in the UK in 2019: the second highest in the world, after Norway." }
+  ],
+  "note": "How to read this: the report is about electronics in general, not game controllers. The controller here is an illustration, and the damage sequence is a dramatisation, not measured data.",
+  "source": "House of Commons Environmental Audit Committee, Electronic Waste and the Circular Economy (26 November 2020), Introduction.",
+  "url": "https://publications.parliament.uk/pa/cm5801/cmselect/cmenvaud/220/22005.htm"
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "parts": [
+      "shell"
+    ],
+    "title": "1. Top shell & buttons",
+    "fact": "The shell is the outside of the controller. It protects the parts inside and holds the buttons.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  },
+  {
+    "parts": [
+      "caps"
+    ],
+    "title": "2. Thumbstick caps",
+    "fact": "The caps are the parts your thumbs touch. They sit on top of the sticks and make the sticks easy to move.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  },
+  {
+    "parts": [
+      "frame"
+    ],
+    "title": "3. Inner frame",
+    "fact": "The frame holds all the parts in place. It makes the controller strong and keeps the front and the back together.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  },
+  {
+    "parts": [
+      "pcb"
+    ],
+    "title": "4. Main board (PCB)",
+    "fact": "The circuit board is the brain of the controller. It reads your buttons and sticks and sends the signal to the game.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  },
+  {
+    "parts": [
+      "sticks"
+    ],
+    "title": "5. Stick modules",
+    "fact": "A stick module measures where you push the stick. It tells the game which way to move. This part wears out easily, and then stick drift can happen.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  },
+  {
+    "parts": [
+      "battery"
+    ],
+    "title": "6. Battery & motors",
+    "fact": "The battery gives power to the controller. The motors make it shake when something happens in the game.",
+    "source": "iFixit, DualSense Controller repair and teardown guides",
+    "url": "https://www.ifixit.com/Device/DualSense_Controller_V3"
+  }
+]

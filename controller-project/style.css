@@ -1,0 +1,451 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+/* ---------- Colours: change these to restyle the whole page ---------- */
+:root {
+  --page: #b4b3ba;
+  --ink: #23232b;
+  --card: #efeef2;
+  --link: #3b2fa0;
+  /* extra colours used by the Part 2 animation */
+  --lav: #b6a7ee;
+  --lav-dark: #7d6bd0;
+  --green: #1e3a2c;
+  --green-light: #2f5c44;
+  --taupe: #8a7b6f;
+  --red: #a8473f;
+}
+
+/* ---------- Basics ---------- */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: var(--page);
+  color: var(--ink);
+}
+
+header,
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+}
+
+h1 {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+}
+
+/* ---------- Layout: object on the left, card on the right ---------- */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  padding: 1rem;
+}
+
+/* ---------- The object ---------- */
+/* script.js sets the width and height from assets/parts.json */
+#object {
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Each part is a box exactly one frame in size (--w by --h).
+   Its sprite sheet is the box's background, so only one frame shows.
+   Moving the background sideways changes the frame.
+   steps() makes it jump from frame to frame instead of sliding. */
+.part {
+  position: absolute;
+  width: var(--w);
+  height: var(--h);
+  background-repeat: no-repeat;
+  background-position-x: 0;
+  pointer-events: none;   /* the box itself ignores the mouse; see .hit below */
+  transition: background-position-x 0.7s steps(var(--steps));
+  /* A thin dark edge, so pale parts still show on the grey page */
+  filter: drop-shadow(0 0 1px rgba(35, 35, 43, 0.6));
+}
+
+.part:hover {
+  filter: brightness(1.06) drop-shadow(0 0 6px var(--lav-dark));
+}
+
+/* "apart" shows the last frame: the sheet is pulled all the way to the left */
+.part.apart {
+  background-position-x: calc(var(--w) * var(--steps) * -1);
+}
+
+/* The clickable area of a part. script.js places it over the part itself,
+   so the empty space the part travels through does not catch clicks. */
+.hit {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ---------- The card ---------- */
+#card {
+  width: 24rem;      /* a fixed width, so the object does not shift when the text changes */
+  max-width: 100%;
+  min-height: 16rem;
+  padding: 1.5rem;
+  background: var(--card);
+  border: 3px solid var(--ink);
+}
+
+#card h2 {
+  margin-top: 0;
+}
+
+#card-source {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+#card-source a {
+  color: var(--link);
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  background: var(--ink);
+  color: var(--card);
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #000000;
+}
+
+#model-output {
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+
+/* ============================================================
+   Part 2: "Used. Broken. Binned."
+   One sprite sheet (12 frames in a row). Each press moves the
+   sheet along one frame with a stepped transition, and
+   "Watch it all" plays every frame with a stepped animation.
+   ============================================================ */
+#story {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+#story hr {
+  border: 0;
+  border-top: 2px dashed var(--taupe);
+  margin: 2rem 0;
+}
+
+.eyebrow {
+  margin: 0;
+  font: 600 0.75rem/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+#story-heading {
+  margin: 0.5rem 0;
+  font-size: 2rem;
+}
+
+#story-stage {
+  padding: 1.25rem 1rem;
+  background: var(--card);
+  border: 3px solid var(--ink);
+}
+
+#story-scene {
+  display: flex;
+  align-items: flex-end;
+  gap: 2%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+#story-wrap {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+}
+
+/* The sprite: 12 frames of 468 x 444 pixels, so the sheet is 1200% wide.
+   --f is the frame number. 100% / 11 jumps = 9.0909% per frame. */
+#story-sprite {
+  width: 100%;
+  aspect-ratio: 468 / 444;
+  background: url("assets/decay-sheet.png") no-repeat;
+  background-size: 1200% 100%;
+  background-position: calc(var(--f, 0) * 9.0909091%) 0;
+  transition: background-position 0.12s steps(1, end);
+}
+
+#story-sprite.auto {
+  animation: story-play var(--auto-dur, 3.6s) steps(11, end) forwards;
+}
+
+@keyframes story-play {
+  from { background-position: 0% 0; }
+  to   { background-position: 100% 0; }
+}
+
+#story-bin {
+  flex: 0 0 26%;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.4s, transform 0.4s;
+  position: relative;
+  z-index: 2;
+}
+
+#story-scene.has-bin #story-bin {
+  opacity: 1;
+  transform: none;
+}
+
+#story-scene.toss #story-sprite {
+  animation: story-toss 1.1s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+@keyframes story-toss {
+  0%   { transform: none; opacity: 1; }
+  45%  { transform: translate(32%, -26%) scale(0.6) rotate(-10deg); opacity: 1; }
+  85%  { transform: translate(78%, 30%) scale(0.2) rotate(26deg); opacity: 1; }
+  100% { transform: translate(80%, 34%) scale(0.16) rotate(30deg); opacity: 0; }
+}
+
+#story-scene.gone #story-sprite {
+  opacity: 0;
+}
+
+#story-hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 720px;
+  margin: 1rem auto 0;
+  font: 600 0.75rem/1 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#story-meter {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 14rem;
+}
+
+#story-bar {
+  flex: 1;
+  height: 14px;
+  padding: 1px;
+  background: #d6d5dc;
+  border: 2px solid var(--ink);
+}
+
+#story-bar-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--green-light);
+  transition: width 0.12s steps(4, end), background-color 0.2s;
+}
+
+#story-caption {
+  max-width: 720px;
+  min-height: 3.2em;
+  margin: 0.9rem auto 0;
+  padding: 0.6rem 0.9rem;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+}
+
+#story-caption small {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+#story-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+#story-controls button {
+  padding: 0.7rem 1.3rem;
+  background: #ffffff;
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  font-weight: bold;
+}
+
+#story-controls button:hover:not(:disabled) {
+  background: #f3f1fb;
+}
+
+#story-controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#story-controls #story-press {
+  background: var(--lav);
+  box-shadow: 0 4px 0 var(--lav-dark);
+  font-size: 1.1rem;
+  padding: 0.8rem 2rem;
+}
+
+#story-controls #story-press.danger {
+  background: var(--green);
+  color: #ffffff;
+  box-shadow: 0 4px 0 #0e1d15;
+}
+
+#story-facts {
+  margin-top: 2rem;
+}
+
+#story-facts[hidden] {
+  display: none;
+}
+
+#story-facts p {
+  max-width: 60ch;
+}
+
+#story-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+  gap: 0.9rem;
+  margin: 1.25rem 0;
+}
+
+.stat {
+  padding: 1rem;
+  background: var(--green);
+  color: #e8ece9;
+  border: 2px solid var(--ink);
+}
+
+.stat b {
+  display: block;
+  margin-bottom: 0.5rem;
+  white-space: nowrap;
+  font: bold clamp(1.6rem, 4.6vw, 2.1rem) / 1 ui-monospace, Menlo, Consolas, monospace;
+  color: var(--lav);
+}
+
+.stat span {
+  font-size: 0.95rem;
+}
+
+#story-note {
+  max-width: none !important;
+  padding: 0.8rem 1rem;
+  background: var(--card);
+  border: 2px dashed var(--taupe);
+  font-size: 0.9rem;
+}
+
+#story-source {
+  max-width: none !important;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+#story-source a {
+  color: var(--link);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #story-scene.toss #story-sprite {
+    animation-duration: 0.01s;
+  }
+}
+
+.part {
+  transition: background-position-x 0.7s steps(var(--steps)),
+              transform 0.7s steps(var(--steps));
+}
+#part-pcb.apart     { transform: translateY(22px); }   /* 4 */
+#part-sticks.apart  { transform: translateY(154px); }  /* 5 Stick modules */
+#part-battery.apart { transform: translateY(113px); }  /* 6 */
+#object { height: 640px !important; }
+#part-frame .hit { clip-path: inset(30px 45px 30px 45px); }
+/* ---------- Pixel retro arcade theme ----------
+   Load AFTER style.css. Delete the <link> line to go back to the old look. */
+
+:root{--page:#0e2a1e;--ink:#fff6d6;--card:#18402d;--link:#ffd400;--lav-dark:#ffd400;--y:#ffd400;--r:#ff4a4a;--c:#35e6ff;--k:#06140e}
+
+body{font-family:VT323,monospace;font-size:1.35rem;color:var(--ink);image-rendering:pixelated;
+  background:
+    linear-gradient(rgba(255,255,255,.04) 2px,transparent 2px) 0 0/16px 16px,
+    linear-gradient(90deg,rgba(255,255,255,.04) 2px,transparent 2px) 0 0/16px 16px,
+    #0e2a1e;
+  background-attachment:fixed}
+/* CRT scanlines */
+body::after{content:"";position:fixed;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px);z-index:50}
+
+h1,h2{font-family:'Press Start 2P',monospace;font-weight:400;text-transform:uppercase;line-height:1.5}
+h1{font-size:1.5rem;color:var(--y);text-shadow:4px 4px 0 var(--r),8px 8px 0 var(--k)}
+header p{color:var(--c);font-size:1.4rem;letter-spacing:.04em}
+
+/* hard pixel outline on the controller parts; yellow when hovered */
+.part{filter:drop-shadow(2px 0 0 var(--k)) drop-shadow(-2px 0 0 var(--k)) drop-shadow(0 2px 0 var(--k)) drop-shadow(0 -2px 0 var(--k))}
+.part:hover{filter:drop-shadow(2px 0 0 var(--y)) drop-shadow(-2px 0 0 var(--y)) drop-shadow(0 2px 0 var(--y)) drop-shadow(0 -2px 0 var(--y))}
+
+/* info card: chunky border + hard block shadow */
+#card{background:var(--card);border:4px solid var(--ink);border-radius:0;
+  box-shadow:8px 8px 0 var(--k),inset 0 0 0 4px var(--k)}
+#card h2{color:var(--y);text-shadow:3px 3px 0 var(--k);font-size:.95rem;text-transform:none}
+#card p{font-size:1.4rem;line-height:1.15}
+a{color:var(--c)}
+#card-source{opacity:1}
+
+/* arcade push-buttons: press down 6px when clicked */
+#ask-button,button{font-family:'Press Start 2P',monospace;font-size:.7rem;text-transform:uppercase;
+  color:var(--k);background:var(--y);border:4px solid var(--k);border-radius:0;padding:.9rem 1.1rem;cursor:pointer;
+  box-shadow:0 6px 0 #b8860b,0 6px 0 4px var(--k);transition:none}
+#ask-button:hover,button:hover{background:#fff06a}
+#ask-button:active,button:active{transform:translateY(6px);box-shadow:0 0 0 #b8860b,0 0 0 4px var(--k)}
+
+/* Part 2 */
+#story-stage{background:var(--card)!important;border:4px solid var(--ink)!important;border-radius:0!important;box-shadow:8px 8px 0 var(--k)!important}
+#story-caption{background:var(--k)!important;color:var(--ink)!important;border:4px solid var(--ink)!important;border-radius:0!important;box-shadow:none!important;font-size:1.4rem}
+#story-caption *{color:inherit!important}
+#story-bar{background:var(--k)!important;border:4px solid var(--ink)!important;border-radius:0!important;height:22px}
+#story-bar-fill{background:repeating-linear-gradient(90deg,var(--r) 0 12px,var(--k) 12px 15px)!important;box-shadow:none!important}
+#story-hud,#story-note{color:var(--c)!important;font-family:'Press Start 2P',monospace!important;font-size:.6rem!important;line-height:1.6}
+#story-press,#story-auto,#story-reset{font-family:'Press Start 2P',monospace!important;font-size:.65rem!important;text-transform:uppercase;
+  border-radius:0!important;clip-path:none!important;color:var(--k)!important;background:var(--c)!important;border:4px solid var(--k)!important;
+  box-shadow:0 6px 0 #1a8fa0,0 6px 0 4px var(--k)!important}
+#story-press{background:var(--r)!important;box-shadow:0 6px 0 #a02020,0 6px 0 4px var(--k)!important}
+#story-press:active,#story-auto:active,#story-reset:active{transform:translateY(6px);box-shadow:none!important}
+footer{color:var(--c);font-size:1.2rem}
+
+/* link-buttons between the two pages */
+#next-part{text-align:center;margin:2.5rem 0 1rem}
+.next-link{display:inline-block;font-family:'Press Start 2P',monospace;font-size:.7rem;text-transform:uppercase;text-decoration:none;
+  color:var(--k);background:var(--y);border:4px solid var(--k);padding:.9rem 1.1rem;box-shadow:0 6px 0 #b8860b,0 6px 0 4px var(--k)}
+.next-link:hover{background:#fff06a}
+.next-link:active{transform:translateY(6px);box-shadow:0 0 0 #b8860b,0 0 0 4px var(--k)}

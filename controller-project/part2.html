@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Used. Broken. Binned.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <h1>What's inside a game controller?</h1>
+    <p><a id="back-link" href="index.html">&larr; Back to Part 1: take the controller apart</a></p>
+  </header>
+
+  <!-- A second sprite sheet that plays one frame per click. -->
+  <section id="story" aria-label="What happens to the controller after it breaks">
+    <hr>
+    <p class="eyebrow">Part 2 &middot; After the controller breaks</p>
+    <h2 id="story-heading">Used. Broken. Binned.</h2>
+    <p id="story-lede">Press the button and play a few rounds. In this story, nobody repairs the controller and nobody recycles it.</p>
+
+    <div id="story-stage">
+      <div id="story-scene">
+        <div id="story-wrap">
+          <div id="story-sprite" role="img" aria-label="Two hands holding a game controller"></div>
+        </div>
+        <svg id="story-bin" viewBox="0 0 60 70" shape-rendering="crispEdges" aria-hidden="true">
+          <rect x="22" y="8" width="16" height="6" fill="#2f5c44"/>
+          <rect x="2" y="14" width="56" height="8" fill="#2f5c44"/>
+          <polygon points="6,22 54,22 50,68 10,68" fill="#1e3a2c"/>
+          <rect x="20" y="32" width="20" height="16" fill="#b6a7ee"/>
+          <path d="M24 35 L36 45 M36 35 L24 45" stroke="#1e3a2c" stroke-width="2.5" fill="none"/>
+          <rect x="9" y="62" width="42" height="2" fill="#2f5c44"/>
+        </svg>
+      </div>
+
+      <div id="story-hud">
+        <div id="story-meter"><span>Durability</span><div id="story-bar"><i id="story-bar-fill"></i></div></div>
+        <div><b id="story-count">0</b> presses</div>
+      </div>
+      <p id="story-caption" aria-live="polite"></p>
+
+      <div id="story-controls">
+        <button id="story-press" type="button">Press</button>
+        <button id="story-auto" type="button">Watch it all</button>
+        <button id="story-reset" type="button">Start again</button>
+      </div>
+    </div>
+
+    <div id="story-facts" hidden>
+      <h2 id="story-facts-title"></h2>
+      <p id="story-facts-intro"></p>
+      <div id="story-cards"></div>
+      <p id="story-note"></p>
+      <p id="story-source"></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Project 0. Facts are loaded from data/waste.json. All visuals are my own drawings.</p>
+  </footer>
+
+  <script src="story.js"></script>
+</body>
+</html>
