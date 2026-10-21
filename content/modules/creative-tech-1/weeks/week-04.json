@@ -1,13 +1,19 @@
 {
-  "week": 4,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
+  "related_work": "Before last Thursday, I kept working on my Project 0. I also made a PowerPoint to explain my project better. On Thursday, I gave my presentation. At first I was very nervous, but my teacher and classmates encouraged me, and I finished it. I will write the details of the project in my project blog.\n\nOn Friday, we went to City Hall in Bristol for an event. In the morning, we joined a workshop. Everyone introduced themselves, and the host taught us about point clouds. We also scanned the room we were in, and it was very interesting. Our teacher also shared some delicious cinnamon rolls with us.\n\nIn the afternoon, we went to an e-waste installation exhibition, and we could join in. My friend and I took apart phones, computers and other things. Then we connected a motor to a piece of bamboo. We controlled the motor, so the bamboo hit the CPU cooler of a computer. This made a rhythmic knocking sound. After we finished, many people came and tried our small installation.\n\nThen we went to a debate. But the debate was very academic, and we could not understand some parts well. In the evening, we went to a party on a boat and chatted with people. It was a very full week.",
+  "references": "",
   "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "date": "2026-10-20T10:41:00.000+01:00",
+  "results_discussion": "",
+  "week": 4,
+  "title": "week4",
+  "images": [
+    "assets/images/img_5908.png",
+    "assets/images/img_5914.jpeg",
+    "assets/images/img_5923.jpeg",
+    "assets/images/img_2262.jpeg",
+    "assets/images/img_5936.jpeg"
+  ],
+  "introduction": "This week was very eventful. We finished and presented our project on Thursday, and went to Bristol on Friday. It was a week filled with both pressure and a sense of accomplishment and it was a lot of fun.",
+  "video": ""
 }

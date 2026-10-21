@@ -6,6 +6,19 @@
       "images": [
         "assets/images/mood-board.png"
       ]
+    },
+    {
+      "title": "project0-final",
+      "description": "Idea\n\nI like playing games, and my controller once had stick drift. I wanted to know what is inside a controller and why it breaks. So my project has two parts. Part 1 shows the parts inside a controller. Part 2 shows how a controller becomes broken and ends up as waste.\n\nResearch\n\nI used the iFixit teardown guides for the DualSense controller to learn the main parts: the shell and buttons, the thumbstick caps, the inner frame, the main board (PCB), the stick modules, and the battery and motors. I also read about e-waste to understand why a broken controller is a bigger problem than it looks. [Add your own sources here.]\n\nPart 1: Click the parts\n\nOn the first page, the user clicks a part of the controller. The part moves out with a sprite sheet animation, and a card explains what the part does. For example: “The shell is the outside of the controller. It protects the parts inside and holds the buttons.” There is also an “Ask the model” button. When the user clicks it, Claude explains in two short sentences why the part matters.\n\nPart 2: Used. Broken. Binned.\n\nA button on the first page takes the user to a second page. There, each click moves the controller one step closer to being broken, using a second sprite sheet of 12 frames. After a few clicks the page says “The D-pad stops responding.”\n\nHow I built it\n\nI used HTML for the structure, CSS for the style and the sprite sheet animation, and JavaScript for the interaction. The text and part information are stored in JSON files, so I can change the content without changing the code. For the sprite sheets, CSS moves the image step by step with steps(). When the user clicks, JavaScript toggles a class called apart, and CSS does the movement. I split the project into two pages, index.html and part2.html, to keep the code clear.\n\nPresentation and feedback\n\nI made a PowerPoint to explain the code, with a code screenshot and a result image on each slide. I presented on Thursday. I was very nervous at first, but my teacher and classmates encouraged me. [Add one or two things you learned from the questions or feedback.]\n\nProblems and limits\n\nAt first the server did not work because of a port problem and an API key setup problem, and I fixed them step by step. The project only shows one controller design, and the sources mostly come from one website. The online version on GitHub Pages cannot run the “Ask the model” button, because it needs a local server. [Add any other problems you really had.]",
+      "link": "https://winnie0502.github.io/createch_web_Winnie/controller-project/",
+      "images": [
+        "assets/images/main_closed.png",
+        "assets/images/main_shell.png",
+        "assets/images/obj_all_apart.png",
+        "assets/images/story_0.png",
+        "assets/images/card_top.png",
+        "assets/images/card_shell.png"
+      ]
     }
   ]
 }
