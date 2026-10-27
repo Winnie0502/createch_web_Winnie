@@ -68,6 +68,7 @@ collections:
         required: false
         field: { label: "Image", name: "image", widget: "image" }
       - { label: "Video URL (YouTube or Vimeo link)", name: "video", widget: "string", required: false }
+      - { label: "Website URL", name: "link", widget: "string", required: false }
       - label: "References"
         name: "references"
         widget: "text"

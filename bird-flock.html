@@ -1,0 +1,418 @@
+<title>Murmuration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400&display=swap">
+<style>
+/* Layout: a single sheet of pale sky. The flock fills it. Title and a short note sit bottom-left, controls bottom-right, a species label top-left. */
+:root{
+  --paper:#e0dacd;
+  --ink:#16130f;
+  --ink-soft:#5b5346;
+  --line:rgba(22,19,15,.4);
+  --font-display:'Instrument Serif','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --font-mono:'DM Mono',ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--paper:#0d0d0c;--ink:#ebe5d6;--ink-soft:#a39b8a;--line:rgba(235,229,214,.4);color-scheme:dark}
+}
+:root[data-theme="dark"]{--paper:#0d0d0c;--ink:#ebe5d6;--ink-soft:#a39b8a;--line:rgba(235,229,214,.4);color-scheme:dark}
+
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-display);overflow:hidden;-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;overflow:hidden}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+#sky{touch-action:none}
+
+.label{
+  position:fixed;top:0;left:0;margin:0;pointer-events:none;
+  padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,3vw,40px) 0;
+  font:400 11px/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);
+  text-shadow:0 0 10px var(--paper),0 0 3px var(--paper);
+}
+.foot{
+  position:fixed;left:0;right:0;bottom:0;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;
+  padding:20px clamp(16px,3vw,40px) calc(20px + env(safe-area-inset-bottom,0px));
+  pointer-events:none;
+}
+.about{min-width:0;max-width:30em;text-shadow:0 0 16px var(--paper),0 0 5px var(--paper)}
+h1{margin:0;font:italic 400 clamp(46px,6.4vw,96px)/.95 var(--font-display);letter-spacing:-.01em;color:var(--ink)}
+.count{margin:14px 0 0;font:400 11px/1.4 var(--font-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.note{margin:10px 0 0;font:400 17px/1.45 var(--font-display);color:var(--ink-soft);text-wrap:pretty}
+.hint{margin:12px 0 0;font:400 11px/1.5 var(--font-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);opacity:.8}
+
+.ctl{display:flex;gap:8px;flex-wrap:wrap;pointer-events:auto}
+.ctl button{
+  height:40px;padding:0 16px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--ink);
+  font:400 11px/1 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;
+  transition:background .25s,color .25s,border-color .25s;
+}
+.ctl button:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.ctl button:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.ctl button{transition:none}}
+</style>
+
+<main class="stage" id="stage" lang="en-GB">
+  <canvas id="paper" aria-hidden="true"></canvas>
+  <canvas id="sky" role="img" aria-label="Thousands of tiny birds forming one enormous bird that keeps changing shape. Moving the pointer parts the flock; clicking scatters it."></canvas>
+  <p class="label">Sturnus vulgaris &middot; Common starling</p>
+  <div class="foot">
+    <div class="about">
+      <h1>Murmuration</h1>
+      <p class="count"><span id="n">0</span> birds &middot; one bird</p>
+      <p class="note">Each starling watches only its few nearest neighbours. The enormous bird they make together belongs to none of them.</p>
+      <p class="hint">Move the cursor to part the flock &middot; click to scatter it</p>
+    </div>
+    <nav class="ctl" aria-label="Flock controls">
+      <button id="bScatter" type="button">Scatter</button>
+      <button id="bGather" type="button">Gather</button>
+      <button id="bTheme" type="button" aria-label="Switch between day and night">Night</button>
+    </nav>
+  </div>
+</main>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var paperC=$('paper'), skyC=$('sky');
+var pctx=paperC.getContext('2d'), ctx=skyC.getContext('2d');
+var mqReduce=matchMedia('(prefers-reduced-motion: reduce)');
+var reduce=mqReduce.matches;
+var root=document.documentElement;
+try{var saved=localStorage.getItem('murmur-theme'); if(saved==='dark'||saved==='light') root.dataset.theme=saved;}catch(e){}
+
+function clamp(x,a,b){return x<a?a:x>b?b:x}
+function smooth(a,b,x){x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)}
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+var W=0,H=0,DPR=1,R=300,U=1.6,N=0;
+var theme={paper:'#e0dacd',ink:'#16130f',dark:false};
+
+/* ---------- sky: soft cloud, fine grain (drawn once per size and theme) ---------- */
+function grainTile(){
+  var c=document.createElement('canvas'); c.width=c.height=192;
+  var g=c.getContext('2d'), id=g.createImageData(192,192), d=id.data, r=rng(77);
+  for(var i=0;i<d.length;i+=4){
+    var n=r(), m=r();
+    if(theme.dark){d[i]=235;d[i+1]=229;d[i+2]=214;d[i+3]=n>0.94?8+m*18:m*5}
+    else{d[i]=60;d[i+1]=48;d[i+2]=30;d[i+3]=n>0.92?8+m*22:m*6}
+  }
+  g.putImageData(id,0,0); return c;
+}
+function cloud(x,y,rx,ry,a,rgb){
+  pctx.save(); pctx.translate(x,y); pctx.scale(1,ry/rx);
+  var g=pctx.createRadialGradient(0,0,0,0,0,rx);
+  g.addColorStop(0,'rgba('+rgb+','+a+')'); g.addColorStop(1,'rgba('+rgb+',0)');
+  pctx.fillStyle=g; pctx.beginPath(); pctx.arc(0,0,rx,0,6.2832); pctx.fill(); pctx.restore();
+}
+function drawPaper(){
+  var w=paperC.width,h=paperC.height;
+  pctx.setTransform(1,0,0,1,0,0);
+  pctx.fillStyle=theme.paper; pctx.fillRect(0,0,w,h);
+  pctx.setTransform(DPR,0,0,DPR,0,0);
+  var v=pctx.createLinearGradient(0,0,0,H);
+  if(theme.dark){v.addColorStop(0,'rgba(0,0,0,.45)');v.addColorStop(.5,'rgba(235,229,214,.05)');v.addColorStop(1,'rgba(0,0,0,.35)')}
+  else{v.addColorStop(0,'rgba(70,58,40,.16)');v.addColorStop(.5,'rgba(255,252,242,.34)');v.addColorStop(1,'rgba(70,58,40,.10)')}
+  pctx.fillStyle=v; pctx.fillRect(0,0,W,H);
+  var rgb=theme.dark?'235,229,214':'255,252,244', a=theme.dark?0.05:0.34;
+  cloud(W*.30,H*.30,W*.42,H*.16,a,rgb); cloud(W*.78,H*.58,W*.40,H*.14,a*.9,rgb);
+  cloud(W*.45,H*.86,W*.55,H*.12,a*.8,rgb); cloud(W*.92,H*.18,W*.30,H*.10,a*.7,rgb);
+  var edge=pctx.createRadialGradient(W*.5,H*.5,Math.min(W,H)*.35,W*.5,H*.5,Math.max(W,H)*.78);
+  edge.addColorStop(0,'rgba(0,0,0,0)'); edge.addColorStop(1,theme.dark?'rgba(0,0,0,.5)':'rgba(90,76,52,.28)');
+  pctx.fillStyle=edge; pctx.fillRect(0,0,W,H);
+  pctx.setTransform(1,0,0,1,0,0);
+  pctx.fillStyle=pctx.createPattern(grainTile(),'repeat'); pctx.fillRect(0,0,w,h);
+}
+function readTheme(){
+  var cs=getComputedStyle(root);
+  theme.paper=cs.getPropertyValue('--paper').trim()||theme.paper;
+  theme.ink=cs.getPropertyValue('--ink').trim()||theme.ink;
+  var t=root.dataset.theme;
+  theme.dark=t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme: dark)').matches);
+  $('bTheme').textContent=theme.dark?'Day':'Night';
+  if(W) drawPaper();
+}
+
+/* ---------- the great bird, built in 3D so that every turn gives a new silhouette ---------- */
+var K=56, KW=Math.round(0.474*(K-1)), LA=0.46, LH=0.50;
+var Ltab=new Float32Array(K), Gtab=new Float32Array(K);
+(function(){
+  var pts=[[0,.30],[.15,.345],[.35,.335],[.5,.34],[.64,.41],[.8,.35],[.92,.2],[1,.07]];
+  for(var k=0;k<K;k++){
+    var u=k/(K-1), j=0;
+    while(j<pts.length-2&&u>pts[j+1][0]) j++;
+    var a=pts[j], b=pts[j+1], f=clamp((u-a[0])/(b[0]-a[0]),0,1);
+    Ltab[k]=a[1]+(b[1]-a[1])*f*f*(3-2*f);
+    Gtab[k]=0.86*smooth(0.36,0.95,u);
+  }
+})();
+function Lat(u){var x=u*(K-1),i=Math.min(K-2,x|0);return Ltab[i]+(Ltab[i+1]-Ltab[i])*(x-i)}
+function mkWing(){var o={};['ax','ay','az','fx','fy','fz'].forEach(function(n){o[n]=new Float32Array(K)});return o}
+var WL=mkWing(), WR=mkWing();
+function buildWing(w,s,a1,a2,be,flex){
+  var x=s*0.05, y=-0.02, z=0.10;
+  for(var k=0;k<K;k++){
+    var u=k/(K-1), al=a1+(a2-a1)*smooth(0.40,0.56,u), bt=0.06+be*smooth(0.25,0.95,u);
+    var ca=Math.cos(al), sa=Math.sin(al), cb=Math.cos(bt), sb=Math.sin(bt);
+    var dx=s*ca*cb, dy=-sa, dz=-ca*sb;
+    var nx=dz*dx, ny=dz*dy, nz=-1+dz*dz, ml=1/Math.sqrt(nx*nx+ny*ny+nz*nz);
+    nx*=ml; ny*=ml; nz*=ml;
+    var g=Gtab[k], fx=nx*(1-g)+dx*g, fy=ny*(1-g)+dy*g, fz=nz*(1-g)+dz*g, m=1/Math.sqrt(fx*fx+fy*fy+fz*fz);
+    w.ax[k]=x; w.ay[k]=y; w.az[k]=z; w.fx[k]=fx*m; w.fy[k]=fy*m; w.fz[k]=fz*m;
+    var step=(k<KW?LA/KW:LH/(K-1-KW))*flex;
+    x+=dx*step; y+=dy*step; z+=dz*step;
+  }
+}
+
+var OM=1, phiAcc=0, warpA=0;
+var cxp=0,cyp=0,Rs=1,tailSpread=1;
+var m0=1,m1=0,m2=0,m3=0,m4=1,m5=0,m6=0,m7=0,m8=1;
+function pose(t,dt){
+  var glide=0.5+0.5*Math.sin(0.083*t+1.3), amp=0.22+0.78*smooth(0.12,0.6,glide);
+  phiAcc+=dt*OM*2*Math.PI/(4.2+1.6*Math.sin(0.05*t));
+  var phi=phiAcc, alpha0=0.10+0.22*Math.sin(0.057*t+2.2);
+  var be=0.25+0.5*(0.5+0.5*Math.sin(0.061*t+0.4)), flex=1-0.10*amp*(0.5+0.5*Math.cos(phi));
+  buildWing(WL,-1,alpha0+amp*0.52*Math.sin(phi),alpha0*0.4+amp*0.80*Math.sin(phi-0.9),be,flex);
+  var pr=phi+0.07;
+  buildWing(WR,1,alpha0+amp*0.50*Math.sin(pr),alpha0*0.4+amp*0.78*Math.sin(pr-0.9),be,flex);
+  var yaw=0.35+1.0*Math.sin(0.071*t+0.4)+0.40*Math.sin(0.131*t+2.0);
+  var pit=0.30*Math.sin(0.053*t+2)+0.22*Math.sin(0.097*t);
+  var rol=0.38*Math.sin(0.047*t+0.5)+0.18*Math.sin(0.139*t+1);
+  var cy_=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pit),sp=Math.sin(pit),cr=Math.cos(rol),sr=Math.sin(rol);
+  var a0=cy_,a1=0,a2=sy,b0=sp*sy,b1=cp,b2=-sp*cy_,c0=-cp*sy,c1=sp,c2=cp*cy_;
+  m0=cr*a0-sr*b0; m1=cr*a1-sr*b1; m2=cr*a2-sr*b2;
+  m3=sr*a0+cr*b0; m4=sr*a1+cr*b1; m5=sr*a2+cr*b2;
+  m6=c0; m7=c1; m8=c2;
+  Rs=R*(0.95+0.06*Math.sin(0.041*t));
+  cxp=W*(0.5+0.07*Math.sin(0.037*t)+0.035*Math.sin(0.091*t+1));
+  cyp=H*(0.46+0.04*Math.sin(0.049*t+2));
+  tailSpread=1+0.25*Math.sin(phi+0.7)*amp;
+  warpA=0.012+0.10*smooth(0.25,0.9,0.5+0.5*Math.sin(0.043*t+0.7));
+}
+
+/* ---------- birds ---------- */
+var part,A0,A1,A2,px,py,vx,vy,hx,hy,dsc,wn0,zj,sf,sz,fs,fp,ja,jf,jp,bkt,buckets;
+var TX=0,TY=0,HX=0,HY=0,DS=1;
+function target(i){
+  var p=part[i], lx, ly, lz, ux, uy, uz;
+  if(p<2){
+    var w=p===0?WL:WR, x=A0[i], k=x|0, f=x-k, k1=k+1;
+    var L=(Ltab[k]+(Ltab[k1]-Ltab[k])*f)*A1[i];
+    ux=w.fx[k]+(w.fx[k1]-w.fx[k])*f; uy=w.fy[k]+(w.fy[k1]-w.fy[k])*f; uz=w.fz[k]+(w.fz[k1]-w.fz[k])*f;
+    lx=w.ax[k]+(w.ax[k1]-w.ax[k])*f+L*ux; ly=w.ay[k]+(w.ay[k1]-w.ay[k])*f+L*uy; lz=w.az[k]+(w.az[k1]-w.az[k])*f+L*uz;
+  }else if(p===3){
+    var a=A0[i]*tailSpread, sa=Math.sin(a), ca=Math.cos(a);
+    lx=A1[i]*sa; ly=0.01; lz=-0.30-A1[i]*ca; ux=sa; uy=0; uz=-ca;
+  }else{
+    lx=A0[i]; ly=A1[i]; lz=A2[i]; ux=0; uy=0; uz=1;
+  }
+  var wz=m6*lx+m7*ly+m8*lz, ds=1/Math.max(0.45,1-0.30*wz);
+  TX=cxp+(m0*lx+m1*ly+m2*lz)*ds*Rs; TY=cyp+(m3*lx+m4*ly+m5*lz)*ds*Rs; DS=ds;
+  HX=m0*ux+m1*uy+m2*uz; HY=m3*ux+m4*uy+m5*uz;
+}
+
+function initBirds(){
+  var r=rng(20261010);
+  N=clamp(Math.round(W*H/72),3200,16000);
+  part=new Uint8Array(N); bkt=new Uint8Array(N);
+  A0=new Float32Array(N); A1=new Float32Array(N); A2=new Float32Array(N);
+  px=new Float32Array(N); py=new Float32Array(N); vx=new Float32Array(N); vy=new Float32Array(N);
+  hx=new Float32Array(N); hy=new Float32Array(N); dsc=new Float32Array(N);
+  wn0=new Float32Array(N); zj=new Float32Array(N); sf=new Float32Array(N); sz=new Float32Array(N);
+  fs=new Float32Array(N); fp=new Float32Array(N); ja=new Float32Array(N); jf=new Float32Array(N); jp=new Float32Array(N);
+  var nStray=Math.round(N*0.04), nCore=N-nStray;
+  var nHead=Math.round(nCore*0.03), nBeak=Math.round(nCore*0.01), nTail=Math.round(nCore*0.08), nBody=Math.round(nCore*0.12);
+  var nWing=nCore-nHead-nBeak-nTail-nBody, nL=nWing>>1;
+  var NF=48, i=0;
+  function pick(n,p,fn){for(var c=0;c<n;c++,i++){part[i]=p;fn(i)}}
+  function dk(i,d){var n=d+(r()-.5)*.55;bkt[i]=n>.5?2:(n>.2?1:0)}
+  function wing(i){
+    var u; do{u=r()}while(r()*0.43>Lat(u));
+    if(r()<0.55) u=(Math.floor(u*NF)+0.5)/NF+(r()-.5)*0.35/NF;
+    A0[i]=clamp(u,0,0.999)*(K-1);
+    var vv=Math.pow(r(),0.9); A1[i]=-0.08+1.08*vv;
+    dk(i,1-0.75*vv);
+  }
+  pick(nL,0,wing); pick(nWing-nL,1,wing);
+  pick(nBody,2,function(i){
+    var z=-0.34+r()*0.68, t=(z+0.34)/0.68, rad=(0.025+0.062*Math.pow(Math.sin(Math.PI*t),0.8))*Math.sqrt(r()), a=r()*6.2832;
+    A0[i]=rad*Math.cos(a); A1[i]=rad*Math.sin(a)*0.85; A2[i]=z; bkt[i]=r()<0.8?2:1;
+  });
+  pick(nHead,4,function(i){
+    var x,y,z; do{x=(r()*2-1);y=(r()*2-1);z=(r()*2-1)}while(x*x+y*y+z*z>1);
+    A0[i]=x*0.055; A1[i]=-0.02+y*0.05; A2[i]=0.43+z*0.058; bkt[i]=2;
+  });
+  pick(nBeak,5,function(i){
+    var z0=r(), rad=0.025*(1-z0)*Math.sqrt(r()), a=r()*6.2832;
+    A0[i]=rad*Math.cos(a); A1[i]=0.0+rad*Math.sin(a); A2[i]=0.48+0.12*z0; bkt[i]=2;
+  });
+  pick(nTail,3,function(i){
+    var q=Math.floor(r()*9)/8, d=0.02+0.32*Math.pow(r(),0.9);
+    A0[i]=(q*2-1)*0.32+(r()-.5)*0.03; A1[i]=d; dk(i,1-0.75*d/0.34);
+  });
+  pick(nStray,6,function(i){bkt[i]=r()<0.6?0:1});
+  for(var j=0;j<N;j++){
+    var stray=part[j]===6, q=r();
+    wn0[j]=7+r()*5; zj[j]=0.88+r()*0.2; sf[j]=0.7+r()*0.55;
+    sz[j]=stray?0.7+r()*0.5:0.8+r()*0.5;
+    fs[j]=9+r()*7; fp[j]=r()*6.2832; jf[j]=0.8+r()*1.6; jp[j]=r()*6.2832;
+    var ar=r(); ja[j]=0.8+3.2*ar*ar+(q<0.14?6+16*r():0);
+  }
+  buckets=[[],[],[]];
+  for(j=0;j<N;j++) buckets[bkt[j]].push(j);
+  buckets=buckets.map(function(a){return Int32Array.from(a)});
+  pose(0,0);
+  for(j=0;j<N;j++){
+    dsc[j]=1;
+    if(part[j]===6){
+      var a=r()*6.2832, qq=Math.sqrt(r());
+      px[j]=cxp+Math.cos(a)*qq*R*1.2; py[j]=cyp+Math.sin(a)*qq*R*0.9;
+      var sp=60+r()*120, b=r()*6.2832; vx[j]=Math.cos(b)*sp; vy[j]=Math.sin(b)*sp; hx[j]=Math.cos(b); hy[j]=Math.sin(b);
+    }else{
+      target(j); px[j]=TX+(r()-.5)*24; py[j]=TY+(r()-.5)*24; vx[j]=0; vy[j]=0; hx[j]=HX; hy[j]=HY; dsc[j]=DS;
+    }
+  }
+  $('n').textContent=N.toLocaleString('en-GB');
+}
+
+function resize(){
+  var oR=R, oW=W, oH=H;
+  DPR=Math.min(window.devicePixelRatio||1,2); W=innerWidth; H=innerHeight;
+  paperC.width=skyC.width=Math.round(W*DPR); paperC.height=skyC.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0); ctx.lineCap='round'; ctx.lineJoin='round';
+  R=Math.min(W*0.42,H*0.56); U=clamp(R/300,1.0,2.1);
+  if(N&&oW){var kx=W/oW, ky=H/oH; for(var i=0;i<N;i++){px[i]*=kx; py[i]*=ky; vx[i]*=kx; vy[i]*=ky}}
+  drawPaper();
+}
+
+/* ---------- flock dynamics ---------- */
+var t=0, gth=1, gGoal=1, holdT=0, swarmHold=8;
+var ptr={x:-999,y:-999,on:false};
+
+function flowAng(x,y,FS){
+  return Math.sin(x*FS+t*0.23)*1.7+Math.cos(y*FS*1.2-t*0.19)*1.5+Math.sin((x+y)*FS*0.6+t*0.12)*1.2;
+}
+function update(dt){
+  pose(t,dt);
+  var gE=gth*gth*(3-2*gth), wnS=Math.pow(gE,1.4), zb=0.36+0.60*gE, hk=Math.min(1,dt*8);
+  var jsc=U/1.6, rp=Math.max(60,R*0.15), rp2=rp*rp;
+  var FS=2.2/R, FW=2.6/R, WA=R*warpA, spd=60+R*0.30, RX=Math.min(W*0.5,R*1.5), RY=Math.min(H*0.5,R*1.1);
+  var mx=ptr.x, my=ptr.y, pon=ptr.on;
+  for(var i=0;i<N;i++){
+    var stray=part[i]===6, x=px[i], y=py[i], u=vx[i], w=vy[i], ax=0, ay=0, fdx=0, fdy=0;
+    if(!stray){
+      target(i);
+      var ph=t*jf[i];
+      var tx=TX+Math.sin(TY*FW+t*0.37)*WA+Math.sin(TX*FW*0.7-t*0.23)*WA*0.5+Math.sin(ph+jp[i])*ja[i]*jsc;
+      var ty=TY+Math.cos(TX*FW+t*0.29)*WA+Math.cos(TY*FW*0.8+t*0.19)*WA*0.5+Math.cos(ph*1.13+jp[i]*1.7)*ja[i]*jsc;
+      var wn=wn0[i]*wnS, cz=2*zb*zj[i]*wn;
+      ax=wn*wn*(tx-x)-cz*u; ay=wn*wn*(ty-y)-cz*w;
+      fdx=HX+u*0.0015; fdy=HY+w*0.0015; dsc[i]=DS;
+    }
+    if(stray||gE<0.999){
+      var kk=stray?1:1-gE;
+      var ang=flowAng(x,y,FS);
+      var dx=Math.cos(ang)*0.95, dy=Math.sin(ang)*0.95;
+      var rx=x-cxp, ry=y-cyp, rl=Math.sqrt(rx*rx+ry*ry)+1e-3;
+      dx+=-ry/rl*0.45; dy+=rx/rl*0.45;
+      var qx=rx/RX, qy=ry/RY, q=Math.sqrt(qx*qx+qy*qy);
+      if(q>0.8){var pull=(q-0.8)*3.0; dx-=rx/rl*pull; dy-=ry/rl*pull}
+      var s=spd*sf[i]/(Math.sqrt(dx*dx+dy*dy)+1e-4);
+      ax+=kk*2.6*(dx*s-u); ay+=kk*2.6*(dy*s-w);
+    }
+    if(pon){
+      var ex=x-mx, ey=y-my, d2=ex*ex+ey*ey;
+      if(d2<rp2){var d=Math.sqrt(d2)+0.01, f=1-d/rp; f*=f; ax+=ex/d*16000*f; ay+=ey/d*16000*f}
+    }
+    u+=ax*dt; w+=ay*dt; x+=u*dt; y+=w*dt;
+    var n=1/(Math.sqrt(u*u+w*w)+1e-3), tdx, tdy;
+    if(stray){tdx=u*n; tdy=w*n}
+    else{tdx=u*n*(1-gE)+fdx*gE; tdy=w*n*(1-gE)+fdy*gE}
+    hx[i]+=(tdx-hx[i])*hk; hy[i]+=(tdy-hy[i])*hk;
+    px[i]=x; py[i]=y; vx[i]=u; vy[i]=w;
+  }
+}
+
+function disperse(manual){
+  gGoal=0; holdT=0; swarmHold=manual?14:8;
+  for(var i=0;i<N;i++){
+    var rx=px[i]-cxp, ry=py[i]-cyp, rl=Math.sqrt(rx*rx+ry*ry)+1, m=160+Math.random()*240;
+    vx[i]+=rx/rl*m; vy[i]+=ry/rl*m;
+  }
+}
+function gather(){gGoal=1; holdT=0}
+function shock(x,y){
+  var rad=R*0.5;
+  for(var i=0;i<N;i++){
+    var ex=px[i]-x, ey=py[i]-y, d=Math.sqrt(ex*ex+ey*ey);
+    if(d<rad){var f=Math.pow(1-d/rad,1.4)*620/(d+1); vx[i]+=ex*f; vy[i]+=ey*f}
+  }
+}
+
+/* ---------- drawing: tiny chevrons in three ink tones ---------- */
+var ALPHA=[0.32,0.58,0.88], LW=[0.34,0.42,0.50];
+function draw(){
+  ctx.globalCompositeOperation='destination-out';
+  ctx.fillStyle='rgba(0,0,0,0.62)'; ctx.fillRect(0,0,W,H);
+  ctx.globalCompositeOperation='source-over';
+  ctx.strokeStyle=theme.ink;
+  for(var b=0;b<3;b++){
+    var list=buckets[b];
+    ctx.globalAlpha=ALPHA[b]; ctx.lineWidth=Math.max(0.6,U*LW[b]);
+    ctx.beginPath();
+    for(var j=0;j<list.length;j++){
+      var i=list[j], x=px[i], y=py[i], h0=hx[i], h1=hy[i];
+      var inv=1/Math.sqrt(h0*h0+h1*h1+1e-6); h0*=inv; h1*=inv;
+      var s=U*sz[i]*dsc[i], wv=s*(0.30+0.75*(0.5+0.5*Math.sin(t*fs[i]+fp[i])));
+      var nx=-h1, ny=h0, bx=x-h0*s*0.7, by=y-h1*s*0.7;
+      ctx.moveTo(bx+nx*wv,by+ny*wv); ctx.lineTo(x+h0*s*0.9,y+h1*s*0.9); ctx.lineTo(bx-nx*wv,by-ny*wv);
+    }
+    ctx.stroke();
+  }
+  ctx.globalAlpha=1;
+}
+
+/* ---------- loop ---------- */
+var last=0;
+function frame(now){
+  requestAnimationFrame(frame);
+  var dt=(now-last)/1000; last=now;
+  if(!(dt>0)) return;
+  if(dt>0.05) dt=0.05;
+  t+=dt; holdT+=dt;
+  if(!reduce){
+    if(gGoal===1&&holdT>45) disperse(false);
+    else if(gGoal===0&&holdT>swarmHold) gather();
+  }
+  var rate=gGoal>gth?1/3.8:1/1.2;
+  gth+=clamp(gGoal-gth,-rate*dt,rate*dt);
+  update(dt); draw();
+}
+
+/* ---------- input ---------- */
+skyC.addEventListener('pointermove',function(e){ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true});
+skyC.addEventListener('pointerleave',function(){ptr.on=false});
+skyC.addEventListener('pointercancel',function(){ptr.on=false});
+skyC.addEventListener('pointerup',function(e){if(e.pointerType!=='mouse')ptr.on=false});
+skyC.addEventListener('pointerdown',function(e){ptr.x=e.clientX;ptr.y=e.clientY;ptr.on=true;shock(e.clientX,e.clientY)});
+$('bScatter').addEventListener('click',function(){disperse(true)});
+$('bGather').addEventListener('click',gather);
+$('bTheme').addEventListener('click',function(){
+  var next=theme.dark?'light':'dark';
+  root.dataset.theme=next; readTheme();
+  try{localStorage.setItem('murmur-theme',next)}catch(e){}
+});
+window.addEventListener('keydown',function(e){
+  if(e.key===' '&&e.target===document.body){e.preventDefault(); if(gGoal===1)disperse(true); else gather()}
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',readTheme);
+mqReduce.addEventListener('change',function(e){reduce=e.matches; OM=reduce?0.4:1});
+var rz; window.addEventListener('resize',function(){clearTimeout(rz); rz=setTimeout(resize,120)});
+
+if(reduce) OM=0.4;
+readTheme(); resize(); initBirds();
+requestAnimationFrame(function(n){last=n; requestAnimationFrame(frame)});
+})();
+</script>

@@ -141,6 +141,15 @@ async function renderBlog(moduleId) {
 
     appendMedia(card, week.images, week.video);
 
+    if (week.link) {
+      const a = document.createElement("a");
+      a.href = week.link;
+      a.textContent = "View website →";
+      a.target = "_blank";
+      a.rel = "noopener";
+      card.appendChild(a);
+    }
+
     if (week.references && week.references.trim()) {
       const wrap = document.createElement("div");
       wrap.className = "acm-section";
