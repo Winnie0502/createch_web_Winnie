@@ -16,6 +16,7 @@ const contentEl = document.getElementById("content");
 let modules = [];
 let activeModule = null;
 let activeSubTab = "blog";
+const contentCacheBust = Date.now().toString();
 
 init();
 
@@ -251,7 +252,9 @@ function toEmbedUrl(url) {
 }
 
 async function fetchJSON(path) {
-  const res = await fetch(path, { cache: "no-store" });
+  const url = new URL(path, window.location.href);
+  url.searchParams.set("refresh", contentCacheBust);
+  const res = await fetch(url, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch ${path}`);
   return res.json();
 }
