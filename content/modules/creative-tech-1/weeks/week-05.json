@@ -1,13 +1,18 @@
 {
-  "week": 5,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
-  "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "related_work": "In Boyd’s class, he said data is the base of the web. When we make a file, we should ask two questions: can the browser open it, and how big is it? Raster images save every pixel, so they are big, but vector images only save drawing instructions, so they are small. Then he talked about how data travels online. It is not sent all at once, but cut into small packets. WebSocket keeps a constant connection, and a middle server passes data from one website to another. Our Project 1 is built on this idea. In his demo, two people drove one car together, and the system only sent the car’s position, not video, so it was fast and light.\nBoyd also showed us some of his projects. One of them was about mirrors. The interesting part was that Boyd asked us to take out our phones and look at ourselves. Almost everyone started to care about how they looked. People fixed their hair or touched their face, but this didn't really change anything.",
+  "references": "",
+  "conclusion_future_work": "This week, we need to add an opening part to our project, so the whole idea makes more sense and flows better. I will keep drawing the scene pictures for the project.",
+  "date": "2026-10-26T10:03:00.000+00:00",
+  "results_discussion": "Boyd liked this idea of talking to others with gestures and thinking about their feelings. But he said strangers in front of the screen don’t know why they should join or what they get from it. He called this “onboarding”. He told me not to focus on the technical side, but on the story and why it matters.",
+  "week": 5,
+  "title": "week5",
+  "images": [
+    "assets/images/2ae0356fdac6b6d522e33cee2e68274d.png",
+    "assets/images/faf3e8b092143a35c17331a28143f90e.png",
+    "assets/images/86c7976935dca20bda0fda768f3c550d.png",
+    "assets/images/9535654dfd798dc89eb9bf7f311f6a9f.jpeg"
+  ],
+  "introduction": "This week, Boyd explained what we need to do for Project 1. In Project 1, we have to work in pairs, and we use hand gestures or facial expressions to make it work. I think this is really fun. On Wednesday, Ross talked about p5.js, and we saw lots of interesting examples that we can learn from. On Thursday, Boyd looked at our project and gave us some feedback. On Friday, Ross taught us how to set up a server.",
+  "video": ""
 }

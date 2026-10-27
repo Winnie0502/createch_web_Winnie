@@ -1,13 +1,13 @@
 {
-  "week": 5,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
-  "conclusion_future_work": "",
+  "related_work": "We read Ruha Benjamin’s Race After Technology. Each group looked at one term. My group had “Default Discrimination”, which means unfair treatment that is built into technology, even when nobody wants to be racist. For example, police software uses old data to guess where crime will happen. Because police checked Black areas more in the past, the program keeps sending them back there, like a circle. Benjamin says these are not just “glitches”, they show how the system really works. Miha also talked about Cobalt Red by Siddharth Kara, about cobalt mines in the Congo, and Neema Iyer’s idea of “digital extractivism”.",
+  "references": "",
+  "conclusion_future_work": "This class made me think more about the ethics behind the technology I use. Next, I need to finish my full Practice Grid by 29 October, with at least two values and two principles.",
+  "date": "2026-10-26T11:15:00.000+00:00",
+  "results_discussion": "I learned that values are what you believe, and principles are how you act on them. For example, if you value honesty, your principle is to show your sources and not copy. Miha also said we should not stop at “the sensor can’t see dark skin”, but ask why. AI is not born racist, it learns from an unfair society. Our phones also depend on cobalt, child labour, and factory workers.",
+  "week": 5,
+  "title": "week5",
   "images": [],
-  "video": "",
-  "references": ""
+  "introduction": "This week, Miha gave us feedback on our Practice Grid by email. Then they explained the difference between values and principles. In the second half, we read a book about race and technology in groups, and Miha talked about colonialism and extraction.",
+  "video": ""
 }
