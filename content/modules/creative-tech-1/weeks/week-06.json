@@ -1,13 +1,17 @@
 {
-  "week": 6,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
   "method": "",
-  "results_discussion": "",
-  "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "related_work": "We used the p5.js examples from Blackboard and opened them in VS Code with Live Server. Boyd also asked us to read the p5.js reference for the map() function. All coding tools, like JavaScript, Python, TouchDesigner and Unity, share the same basic ideas.",
+  "references": "",
+  "conclusion_future_work": "This class showed me that I should stop and understand my code, not just copy and paste it.Our crit moved to Thursday, 5 November. Next week.",
+  "date": "2026-11-02T10:12:00.000+00:00",
+  "results_discussion": "I learned that a variable is like a box with a name. A loop does the same thing again and again. A function is a group of steps with a name. An object puts data and behaviour together, like a small circle that can walk by itself. The most useful part for me was map(). It changes a number from one range to another. For example, it can turn the position of a hand into a colour. Boyd said “the heart of what that is, is mapping”. This is very important for my Project 1, because I use hand gestures.",
+  "week": 6,
+  "title": "week6",
+  "images": [
+    "assets/images/截屏2026-11-03-10.24.33.png",
+    "assets/images/截屏2026-11-03-10.25.55.png",
+    "assets/images/截屏2026-11-03-10.27.50.png"
+  ],
+  "introduction": "This week, we looked back at the basics of coding in p5.js. Many of us use AI to write code, but we don’t really understand it. So we went through four of the eleven examples: variables, loops, functions and objects.",
+  "video": ""
 }
