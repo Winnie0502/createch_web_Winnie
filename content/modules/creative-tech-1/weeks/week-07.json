@@ -1,13 +1,15 @@
 {
+  "method": "In our basic coding class, we learned Python, and the teacher gave us a handout. We learned variables, if/else, loops, lists, functions and the random module. We will use these in Project 2, together with TouchDesigner.",
+  "related_work": "The feedback in the crit helps us learn about problems from the audience, so we can make our projects better. In Project 2, we will start to learn projection mapping, TouchDesigner and some other tools.",
+  "references": "",
+  "conclusion_future_work": "I’m still thinking about the direction for my next project. I will also look for some works by related artists to use as references.",
+  "date": "2026-11-06T10:16:00.000+00:00",
+  "results_discussion": "When we talked about our Project 1, we found that our work didn’t have enough critical thinking. There were problems with the interaction at the start, with how we show the topic, and with the meaning behind it. We need to think about all of these carefully. In our project, people play rock-paper-scissors to unlock some memory pictures. Boyd gave us a great idea: we can add more interaction. For example, the audience could write down their own memories, and this would work better. People also liked our art style. All of this feedback is really useful for us.",
   "week": 7,
-  "title": "",
-  "date": "",
-  "introduction": "",
-  "related_work": "",
-  "method": "",
-  "results_discussion": "",
-  "conclusion_future_work": "",
-  "images": [],
-  "video": "",
-  "references": ""
+  "title": "week7",
+  "images": [
+    "assets/images/img_7019.jpeg"
+  ],
+  "introduction": "We had no class on Tuesday. Boyd asked us to work on our projects by ourselves, and we also went to a talk from the government. On Thursday, we showed our projects to everyone. All the projects were really interesting.",
+  "video": ""
 }
